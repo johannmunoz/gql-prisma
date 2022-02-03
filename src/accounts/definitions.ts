@@ -28,8 +28,8 @@ export const accountTypeDefs = gql`
 
   extend type Mutation {
     accountCreate(input: AccountCreateInput!): AccountPayload!
-    accountUpdate(id: Int!, input: AccountUpdateInput!): AccountPayload!
-    accountDelete(id: Int!): ArchivePayload!
+    accountUpdate(id: String!, input: AccountUpdateInput!): AccountPayload!
+    accountDelete(id: String!): ArchivePayload!
   }
 
   input AccountCreateInput {

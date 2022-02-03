@@ -17,8 +17,30 @@ export const userTypeDefs = gql`
     author: User!
   }
 
+  type UserPayload {
+    success: Boolean!
+    user: User
+  }
+
   extend type Query {
     users: [User!]!
     user(id: String!): User!
+  }
+
+  extend type Mutation {
+    userCreate(input: UserCreateInput!): UserPayload!
+    userUpdate(id: String!, input: UserUpdateInput!): UserPayload!
+    userDelete(id: String!): ArchivePayload!
+  }
+
+  input UserCreateInput {
+    accountId: String!
+    name: String!
+    email: String!
+  }
+
+  input UserUpdateInput {
+    name: String!
+    email: String!
   }
 `
