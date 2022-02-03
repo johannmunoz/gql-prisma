@@ -1,0 +1,33 @@
+{
+  "name": "gql-prisma",
+  "scripts": {
+    "dev": "ts-node-dev --no-notify --respawn --transpile-only src/index",
+    "start": "node dist/index",
+    "clean": "rm -rf dist",
+    "build": "tsc",
+    "watch": "tsc -w",
+    "generate": "prisma generate"
+  },
+  "prettier": {
+    "semi": false,
+    "singleQuote": true,
+    "trailingComma": "all"
+  },
+  "main": "dist/index.js",
+  "dependencies": {
+    "@graphql-tools/schema": "^8.3.1",
+    "@prisma/client": "3.8.1",
+    "apollo-server": "3.6.2",
+    "graphql": "15.8.0",
+    "graphql-scalars": "1.14.1"
+  },
+  "devDependencies": {
+    "@types/graphql": "14.5.0",
+    "@types/node": "16.11.22",
+    "@types/ws": "8.2.2",
+    "prisma": "3.8.1",
+    "ts-node": "10.4.0",
+    "ts-node-dev": "1.1.8",
+    "typescript": "4.5.5"
+  }
+}
