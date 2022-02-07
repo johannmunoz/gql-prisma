@@ -8,11 +8,6 @@
     "watch": "tsc -w",
     "generate": "prisma generate"
   },
-  "prettier": {
-    "semi": false,
-    "singleQuote": true,
-    "trailingComma": "all"
-  },
   "main": "dist/index.js",
   "dependencies": {
     "@graphql-tools/schema": "^8.3.1",

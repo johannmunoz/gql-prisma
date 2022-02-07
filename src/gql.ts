@@ -1,7 +1,7 @@
-import { IResolvers } from "@graphql-tools/utils";
-import { DocumentNode } from "graphql";
+import { IResolvers } from '@graphql-tools/utils';
+import { DocumentNode } from 'graphql';
 
 export type GqlApi = {
-  typeDefs: DocumentNode,
-  resolvers: IResolvers
-}
+  typeDefs: DocumentNode;
+  resolvers: IResolvers;
+};

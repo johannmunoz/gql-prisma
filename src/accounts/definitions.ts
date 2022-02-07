@@ -1,4 +1,4 @@
-import { gql } from 'apollo-server'
+import { gql } from 'apollo-server';
 
 export const accountTypeDefs = gql`
   type Account {
@@ -39,4 +39,4 @@ export const accountTypeDefs = gql`
   input AccountUpdateInput {
     name: String!
   }
-`
+`;

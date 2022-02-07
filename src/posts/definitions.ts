@@ -1,4 +1,4 @@
-import { gql } from 'apollo-server'
+import { gql } from 'apollo-server';
 
 export const postTypeDefs = gql`
   type Post {
@@ -46,4 +46,4 @@ export const postTypeDefs = gql`
     title: String!
     content: String!
   }
-`
+`;
