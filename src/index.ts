@@ -1,17 +1,56 @@
-import { ApolloServer } from 'apollo-server';
+import { makeExecutableSchema } from '@graphql-tools/schema';
+import { ApolloServer } from 'apollo-server-express';
+import express from 'express';
+import { execute, subscribe } from 'graphql';
+import { createServer } from 'http';
+import { SubscriptionServer } from 'subscriptions-transport-ws';
 import { context } from './context';
 import { resolversArray, typeDefsArray } from './resolvers';
 
 async function bootstrap() {
-  const server = new ApolloServer({
-    resolvers: resolversArray,
+  const app = express();
+  const httpServer = createServer(app);
+
+  const schema = makeExecutableSchema({
     typeDefs: typeDefsArray,
-    context: context,
+    resolvers: resolversArray,
   });
 
-  server.listen({ port: 3000 }).then(({ url }) => {
-    console.log(`Apollo Server ready at ${url}`);
+  const subscriptionServer = SubscriptionServer.create(
+    {
+      schema,
+      execute,
+      subscribe,
+    },
+    {
+      server: httpServer,
+      path: '/graphql',
+    }
+  );
+
+  const server = new ApolloServer({
+    schema,
+    context: context,
+    plugins: [
+      {
+        async serverWillStart() {
+          return {
+            async drainServer() {
+              subscriptionServer.close();
+            },
+          };
+        },
+      },
+    ],
   });
+
+  await server.start();
+  server.applyMiddleware({ app });
+
+  const PORT = 4000;
+  httpServer.listen(PORT, () =>
+    console.log(`Server is now running on http://localhost:${PORT}/graphql`)
+  );
 }
 
 bootstrap().catch(console.error);

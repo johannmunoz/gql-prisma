@@ -1,4 +1,4 @@
-import { gql } from 'apollo-server';
+import { gql } from 'apollo-server-express';
 
 export const userTypeDefs = gql`
   type User {
@@ -25,6 +25,10 @@ export const userTypeDefs = gql`
   extend type Query {
     users: [User!]!
     user(id: String!): User!
+  }
+
+  extend type Subscription {
+    userCreated: User
   }
 
   extend type Mutation {

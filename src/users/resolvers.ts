@@ -1,7 +1,12 @@
 import { Account, Post, User } from '@prisma/client';
+import { PubSub } from 'graphql-subscriptions';
 import { Context } from '../context';
 import { GqlApi } from '../gql';
 import { userTypeDefs } from './definitions';
+
+const pubsub = new PubSub();
+
+const USER_CREATED = 'USER_CREATED';
 
 const resolvers = {
   Mutation: {
@@ -18,6 +23,11 @@ const resolvers = {
   },
   Account: {
     users: accountUsers,
+  },
+  Subscription: {
+    userCreated: {
+      subscribe: () => pubsub.asyncIterator([USER_CREATED]),
+    },
   },
 };
 
@@ -66,6 +76,11 @@ async function userCreate(root: any, { input }, context: Context) {
     const newUser = input;
 
     const data = await context.prisma.user.create({ data: newUser });
+
+    pubsub.publish(USER_CREATED, {
+      userCreated: data,
+    });
+
     return { success: true, user: data };
   } catch (error) {
     console.error(error);
