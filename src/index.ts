@@ -2,10 +2,25 @@ import { makeExecutableSchema } from '@graphql-tools/schema';
 import { ApolloServer } from 'apollo-server-express';
 import express from 'express';
 import { execute, subscribe } from 'graphql';
+import { RedisPubSub } from 'graphql-redis-subscriptions';
 import { createServer } from 'http';
 import { SubscriptionServer } from 'subscriptions-transport-ws';
 import { context } from './context';
 import { resolversArray, typeDefsArray } from './resolvers';
+import Redis from 'ioredis';
+
+export const pubsub = new RedisPubSub({
+  publisher: new Redis(6379, 'localhost', {
+    retryStrategy: (times) => {
+      return Math.min(times * 50, 2000);
+    },
+  }),
+  subscriber: new Redis(6379, 'localhost', {
+    retryStrategy: (times) => {
+      return Math.min(times * 50, 2000);
+    },
+  }),
+});
 
 async function bootstrap() {
   const app = express();
