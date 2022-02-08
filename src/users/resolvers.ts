@@ -1,10 +1,22 @@
-import { Account, Post, User } from '@prisma/client';
-import { PubSub } from 'graphql-subscriptions';
+import { Account, Post } from '@prisma/client';
+import { RedisPubSub } from 'graphql-redis-subscriptions';
 import { Context } from '../context';
 import { GqlApi } from '../gql';
 import { userTypeDefs } from './definitions';
+import Redis from 'ioredis';
 
-const pubsub = new PubSub();
+const pubsub = new RedisPubSub({
+  publisher: new Redis(6379, 'localhost', {
+    retryStrategy: (times) => {
+      return Math.min(times * 50, 2000);
+    },
+  }),
+  subscriber: new Redis(6379, 'localhost', {
+    retryStrategy: (times) => {
+      return Math.min(times * 50, 2000);
+    },
+  }),
+});
 
 const USER_CREATED = 'USER_CREATED';
 
